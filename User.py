@@ -71,6 +71,12 @@ class City(models.Document):
     provinceid = models.IntField()
     name = models.StringField()
 
+    # turn on inheritance by setting allow_inheritance to True in the meta
+    meta = {'allow_inheritance': True}
+
+class Municipality(City):
+    level = models.IntField()
+
 if __name__ == '__main__':
     city = City()
     city.cityid = 111
@@ -82,9 +88,16 @@ if __name__ == '__main__':
     city1.provinceid = 2223
     city1.name = 'huangshi'
 
+    m = Municipality()
+    m.cityid = 112
+    m.provinceid = 2223
+    m.name = 'chongqin'
+    m.level = 3
+
     city_list = []
     city_list.append(city)
     city_list.append(city1)
+
     print type(city)
     print isinstance(city, models.Document)
     #print city
@@ -92,4 +105,5 @@ if __name__ == '__main__':
     #print MyJSONEncoder().encode(city)
     print json.dumps(city, cls=MongoJSONEncoder)
     print json.dumps(city_list, cls=MongoJSONEncoder)
+    print json.dumps(m, cls=MongoJSONEncoder)
     #print json.dumps(city)
